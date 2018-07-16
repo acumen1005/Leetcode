@@ -17,45 +17,39 @@
 //Output: "bb"
 
 // 枚举长度和回文 中心点
-
-extension String {
-
-  subscript(_ index: Int) -> Character {
-    return self[self.index(self.startIndex, offsetBy: index)]
-  }
-
-}
+//
 
 class Solution {
 
-  func solve(_ str: String) -> String {
-    
-    if str.isEmpty { return "" }
-    
+  func solve(_ charactors: [Character]) -> String {
+
+    if charactors.isEmpty { return "" }
+
     var ans = (0, 0)
-    for (index, _) in str.enumerated() {
-      ans = findMax(a: isPalindrome(str, start: index, end: index + 1), b: ans)
+    for (index, _) in charactors.enumerated() {
+      ans = findMax(a: isPalindrome(charactors, start: index, end: index + 1), b: ans)
     }
-    
-    for (index, _) in str.enumerated() {
-      ans = findMax(a: isPalindrome(str, start: index - 1, end: index + 1), b: ans)
+
+    for (index, _) in charactors.enumerated() {
+      if (ans.1 - ans.0) <= index * 2 {
+        ans = findMax(a: isPalindrome(charactors, start: index - 1, end: index + 1), b: ans)
+      }
     }
-    
-    var result = ""
-    
-    for index in ans.0 ... ans.1 {
-      result.append(str[index])
-    }
-    
-    return result
+
+    return String(charactors[ans.0 ... ans.1])
   }
 
-  func isPalindrome(_ str: String, start: Int, end: Int) -> (left: Int, right: Int) {
-    guard start >= 0 && end < str.count else { return (0, 0) }
+  func isPalindrome(_ charactors: [Character], start: Int, end: Int) -> (left: Int, right: Int) {
+    guard start >= 0 && end < charactors.count else { return (0, 0) }
     var result: (Int, Int) = (0, 0)
     var (index1, index2) = (start, end)
-    while index1 >= 0 && index2 < str.count {
-      if str[index1] != str[index2] {
+    while index1 >= 0 && index2 < charactors.count {
+      if (index2 - index1 + 1) < (result.1 - result.0 + 1) {
+        index1 -= 1
+        index2 += 1
+        continue
+      }
+      if charactors[index1] != charactors[index2] {
         return result
       } else {
         result = (result.1 - result.0 + 1) > (index2 - index1 + 1) ? result : (index1, index2)
@@ -65,7 +59,7 @@ class Solution {
     }
     return result
   }
-  
+
   func findMax(a: (Int, Int), b: (Int, Int)) -> (Int, Int) {
     let lengthA = (a.1 - a.0)
     let lengthB = (b.1 - b.0)
@@ -73,15 +67,14 @@ class Solution {
   }
 
   func longestPalindrome(_ s: String) -> String {
-    return solve(s)
+    let charactors = [Character](s)
+    return solve(charactors)
   }
 }
 
-
 let s = Solution()
-s.solve("babad")
-s.solve("babd")
-s.solve("cbbd")
-s.solve("abcd")
-s.solve("abcddcba")
-s.solve("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+//s.longestPalindrome("babad")
+//s.longestPalindrome("babd")
+//s.solve("cbbd")
+//s.solve("abcd")
+s.longestPalindrome("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
